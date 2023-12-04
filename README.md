@@ -1,6 +1,6 @@
-# react-native-content-petalokasiobjek
+# web view tampilan form dan peta stunting
 
-Peta lokasi objek form input data dan web map untuk konten React Native dalam rangka praktikum Pemrograman Geospasial Perangkat Bergerak Lanjut (PGPBL), Sekolah Vokasi UGM.
+Peta stunting form input data dan web map untuk konten React Native yaitu aplikasi persebaran stunting
 
 ## Stack
 1. HTML
