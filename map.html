@@ -46,21 +46,21 @@
 
         /* Tile Basemap */
 
-		var basemap2 = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-			maxZoom: 19,
-			attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-		});
+        var basemap2 = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        });
 
-		var basemap4 = L.tileLayer('https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png', {
-			maxZoom: 20,
-			attribution: '<a href="https://github.com/cyclosm/cyclosm-cartocss-style/releases" title="CyclOSM - Open Bicycle render">CyclOSM</a> | Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-		});
+        var basemap4 = L.tileLayer('https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png', {
+            maxZoom: 20,
+            attribution: '<a href="https://github.com/cyclosm/cyclosm-cartocss-style/releases" title="CyclOSM - Open Bicycle render">CyclOSM</a> | Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        });
 
-		basemap2.addTo(map);
+        basemap2.addTo(map);
 
         function loadlayer() {
             var points = []; // array to store point coordinate
-            
+
             $.getJSON("https://script.google.com/macros/s/AKfycbwpe4VBL7xyn202oijLw2B8iuUGyxJ3-neSG4IU3urYUQZk-offBKBP4oN5smTk7bX3/exec", function (data) {
                 // iterate through GeoJSON features and extract coordinates
                 data.features.forEach(function (feature) {
@@ -69,9 +69,12 @@
                 });
 
                 // create Heatmap layer
-				var heat = L.heatLayer(points, {
-                    radius: 100,  // Sesuaikan dengan ukuran wilayah yang ingin di-cover
-                    blur: 2,    // Sesuaikan untuk mendapatkan efek visual yang diinginkan
+                var heat = L.heatLayer(points, {
+                    radius: 40,
+                    blur: 4,
+                    maxZoom: 20,     // Meningkatkan nilai maxZoom
+                    minOpacity: 0.3, // Menambahkan parameter minOpacity
+                    gradient: { 0.3: 'blue', 0.4: 'lime', 0.6: 'yellow', 1: 'red' }
                 }).addTo(map);
 
                 // fit the map to the bounds of the Heatmap layer
@@ -79,51 +82,51 @@
             });
 
             var point = L.geoJson(null, {
-				onEachFeature: function (feature, layer) {
-					var popupContent = "<h4>" + feature.properties.name + "</h4>" +
-						"<p>" + feature.properties.alamat + "</p>"+ feature.properties.telpon + "</p>"+ feature.properties.email+ "</p>";
-					layer.on({
-						click: function (e) {
-							point.bindPopup(popupContent);
-						},
-					});
-				},
-			});
-			$.getJSON("https://script.google.com/macros/s/AKfycbzjO9U9f34YP4Qw1lXM4CTO_I6AcPsJcSN-KdUbTjY5Dd-FriGnKsOTYR8P1Pyle5hO/exec", function (markerData) {
-				point.addData(markerData);
-				map.addLayer(point);
-				map.fitBounds(point.getBounds());
-			});
+                onEachFeature: function (feature, layer) {
+                    var popupContent = "<h4>" + feature.properties.name + "</h4>" +
+                        "<p>" + feature.properties.alamat + "</p>" + feature.properties.telpon + "</p>" + feature.properties.email + "</p>";
+                    layer.on({
+                        click: function (e) {
+                            point.bindPopup(popupContent);
+                        },
+                    });
+                },
+            });
+            $.getJSON("https://script.google.com/macros/s/AKfycbzjO9U9f34YP4Qw1lXM4CTO_I6AcPsJcSN-KdUbTjY5Dd-FriGnKsOTYR8P1Pyle5hO/exec", function (markerData) {
+                point.addData(markerData);
+                map.addLayer(point);
+                map.fitBounds(point.getBounds());
+            });
 
-            
+
         }
 
         /* Control Layer */
-		var baseMaps = {
-		"OpenStreetMap": basemap2,
-		"CyclOSM": basemap4
-		};
+        var baseMaps = {
+            "OpenStreetMap": basemap2,
+            "CyclOSM": basemap4
+        };
 
-		L.control.layers(baseMaps, ).addTo(map);
+        L.control.layers(baseMaps,).addTo(map);
 
 
         loadlayer();
 
         /* Image Legend */
-		L.Control.Legend = L.Control.extend({
-		onAdd: function(map) {
-		var img = L.DomUtil.create('img');
-		img.src = 'asset/legenda.png';
-		img.style.width = '200px';
-		return img;
-		}
-		});
+        L.Control.Legend = L.Control.extend({
+            onAdd: function (map) {
+                var img = L.DomUtil.create('img');
+                img.src = 'asset/kelas.png';
+                img.style.width = '200px';
+                return img;
+            }
+        });
 
-		L.control.Legend = function(opts) {
-		return new L.Control.Legend(opts);
-		}
+        L.control.Legend = function (opts) {
+            return new L.Control.Legend(opts);
+        }
 
-		L.control.Legend({ position: 'bottomleft' }).addTo(map);
+        L.control.Legend({ position: 'bottomleft' }).addTo(map);
 
 
     </script>
