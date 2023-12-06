@@ -23,6 +23,7 @@
         .rs{
             color: #ff0000;
             text-shadow: 0 0 5px white;
+            font-size: 15px;
 
         }
         header {
@@ -101,7 +102,7 @@
 
                 // create Heatmap layer
                 var heat = L.heatLayer(points, {
-                    radius: 40,
+                    radius: 30,
                     blur: 4,
                     maxZoom: 20,     // Meningkatkan nilai maxZoom
                     minOpacity: 0.3, // Menambahkan parameter minOpacity
@@ -118,7 +119,7 @@
                         icon: L.divIcon({
                             className: "rs",
                             html: '<i class="fas fa-clinic-medical" ></i>',
-                            iconSize: [25, 25], // Sesuaikan ukuran ikon
+                            iconSize: [50, 50], // Sesuaikan ukuran ikon
                             iconAnchor: [12, 24], // Sesuaikan posisi ikon
                         }),
                     });
